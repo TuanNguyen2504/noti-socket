@@ -1,0 +1,81 @@
+include:
+  - project: "ci-templates/ci-templates"
+    file: "base/nodejs.gitlab-ci.yml"
+    ref: "v3.0.0"
+
+variables:
+  APP_NAME: noti-socket
+  PROJECT: "data-platform"
+
+compile:dev:
+  extends:
+    - .compile-dev
+  environment:
+    name: dev
+
+compile:staging:
+  extends:
+    - .compile-staging
+  environment:
+    name: staging
+
+compile:production:
+  extends:
+    - .compile-production
+  environment:
+    name: prod
+
+dockerize:dev:
+  extends:
+    - .dockerize-dev
+  environment:
+    name: dev
+
+dockerize:staging:
+  extends:
+    - .dockerize-staging
+  environment:
+    name: staging
+
+dockerize:production:
+  extends:
+    - .dockerize-production
+  environment:
+    name: prod
+
+deploy:dev:
+  extends:
+    - .deploy-dev
+  environment:
+    name: dev
+  before_script:
+    - export POD_LIMIT_CPU=0.5
+    - export POD_LIMIT_MEMORY=800Mi
+    - export POD_REQUEST_CPU=0.1
+    - export POD_REQUEST_MEMORY=100Mi
+    - export HOST_APP=dev-cadshouse.fpt.vn
+# END ADD dev-new
+
+deploy:staging:
+  extends:
+    - .deploy-staging
+  environment:
+    name: staging
+  before_script:
+    - export POD_LIMIT_CPU=0.5
+    - export POD_LIMIT_MEMORY=800Mi
+    - export POD_REQUEST_CPU=0.1
+    - export POD_REQUEST_MEMORY=100Mi
+    - export HOST_APP=staging-cadshouse.fpt.vn
+
+deploy:prod:
+  extends:
+    - .deploy-production
+  environment:
+    name: prod
+  before_script:
+    - export POD_LIMIT_CPU=2
+    - export POD_LIMIT_MEMORY=2Gi
+    - export POD_REQUEST_CPU=0.3
+    - export POD_REQUEST_MEMORY=500Mi
+    - export HOST_APP=cadshouse.fpt.vn
