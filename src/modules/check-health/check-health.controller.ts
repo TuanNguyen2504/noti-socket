@@ -1,14 +1,16 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '~/guard/auth.guard';
+import { Controller, Get } from '@nestjs/common';
+import { Logger } from '~/configs/logger';
 
 @Controller()
 export class CheckHealthController {
+  private readonly logger = new Logger('Check Health');
+
   @Get('/check-health')
   checkHealth(): string {
     return 'OK';
   }
 
-  @UseGuards(AuthGuard)
+  // @UseGuards(AuthGuard)
   @Get('/test')
   test(): string {
     return 'Test';
